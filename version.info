@@ -1,4 +1,4 @@
 name = "jquery.click_replace"
 description = "Click on element and it's replaced with another."
-version = 0.0.1
+version = 0.0.2
 author = Aaron Klump <sourcecode@intheloftstudios.com>
