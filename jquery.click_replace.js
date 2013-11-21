@@ -32,8 +32,9 @@ $.fn.clickReplace = function($replaceElement, options) {
   }
 
   // Resize if needed
-  if (settings.resize) {
-    var resize = [$replaceElement.width(), $replaceElement.height()];
+  if (settings.autoResize) {
+    //$replaceElement.show();
+    var resize = [$replaceElement.css('width'), $replaceElement.css('height')];
     $clickElement.width(resize[0]);
     $clickElement.height(resize[1]);
   }
@@ -41,9 +42,9 @@ $.fn.clickReplace = function($replaceElement, options) {
   //Click handler
   $clickElement
   .hover(function () {
-    $(this).addClass('hover')
+    $(this).addClass('hover');
   }, function () {
-    $(this).removeClass('hover')
+    $(this).removeClass('hover');
   })
   .click(function () {
     $clickElement
@@ -53,11 +54,19 @@ $.fn.clickReplace = function($replaceElement, options) {
     .show();
 
     if (settings.replaceCallback) {
-      settings.replaceCallback($clickElement, $replaceElement)
+      settings.replaceCallback($clickElement, $replaceElement);
     }
   });
 
-  return this;
+  // Create a response object that contains the revert method
+  var response = {};
+  response.args = [$clickElement, $replaceElement, settings];
+  response.revert = function() {
+    $replaceElement.addClass('hidden').hide();
+    $clickElement.removeClass('hidden').show();
+  };
+
+  return response;
 };
 
 $.fn.clickReplace.defaults = {
@@ -66,7 +75,7 @@ $.fn.clickReplace.defaults = {
   
   // Resize the click element to match the replace element; useful when using
   // an <img> as click for a youtube embed as replace.
-  resize         : true,   
+  autoResize            : true,
 
   // A function to call when replacing
   replaceCallback       : null
