@@ -5,54 +5,61 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.2.3/jquery.min.js"></script>
   <script src="https://www.youtube.com/iframe_api"></script>
   <script src="../jquery.click_replace.min.js"></script>
-  <script>
-   </script>
+  <style type="text/css" media="all">
+    .click-replace img {
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <h1>Demo of jquery.click_replace.js and youtube</h1>
+
+  <p>This shows how we can use a still image as a poster that removes the youtube chrome before the movie is played as well as after the movie ends.  Clicking the poster image fires the API to start playing the movie.  Watch what happens when the film plays out it's final second; the still image returns. Also the poster image is auto-sized to match the film.</p>
   
-  <!-- Issues: IE 11 does not allow the video to start playing -->
+  <!-- It's very important when using the YouTube API to not call clickReplace
+  until the video is ready, otherwise the api struggles with a hidden element.
+  http://stackoverflow.com/questions/11494996/object-doesnt-support-this-property-or-method-in-ie-8-executes-fine-in-debug -->
   
   <div class="click-replace">
     <img src="images/still-shot.jpg" alt="Still shot image from film">
-    <div id="player"></div>
+    <iframe id="player" width="420" height="315" src="//www.youtube.com/embed/Q_qodDo4cXo?rel=0" frameborder="0" allowfullscreen></iframe>
   </div>
   <p class="text-muted">jquery.click_replace.js is brought to you by <a href="http://www.intheloftstudios.com">In the Loft Studios</a></p>
   <script>
-    var clickReplaceDemo = {};
     function onYouTubeIframeAPIReady() {
+
+      var demo = {};
+
+      // When the image gets replaced, we auto start the player, in effect
+      // clicking the image IS the play button.
+      function imageReplaced() {
+        demo.player.playVideo();  
+      }
+
+      // Once the player is ready, we'll apply our jquery plugin.  Notice that
+      // we use come css with this example so we don't have flickering of
+      // the display while we're waiting for the video to get ready
+      function onReady() {
+        demo.original = jQuery('.click-replace img').clickReplace(jQuery('.click-replace iframe'), {
+          'replaceCallback': imageReplaced
+        });        
+      }
+
+      // When the video is finished playing, we revert to the still
+      function revertBack(event) {
+        if(event.data === 0) {          
+          demo.original.revert();
+        }        
+      }
 
       // Set youtube to the player object found at #player
       // https://developers.google.com/youtube/iframe_api_reference
-      clickReplaceDemo.player = new YT.Player('player', {
-        height: '390',
-        width: '640',
-        videoId: 'Q_qodDo4cXo',
+      demo.player = new YT.Player('player', {
         events: {
-          'onStateChange': function(event) {
-            if(event.data === 0) {          
-              clickReplaceDemo.original.revert();
-            }
-          }
+          'onReady': onReady,
+          'onStateChange': revertBack
         }
-      });
-
-      (function($) {
-        $('document').ready(function(){
-
-          // Create original, an object with method .revert() to put things back
-          // when the video is done playing.
-          clickReplaceDemo.original = $('.click-replace img').clickReplace($('.click-replace iframe'), {
-            
-            // Called when the user clicks the image, the video is played
-            'replaceCallback': function () {
-              if (clickReplaceDemo.player.playVideo) {
-                clickReplaceDemo.player.playVideo();  
-              }
-            }
-          });
-        });
-      })(jQuery);      
+      });    
     }
   </script>  
 </body>

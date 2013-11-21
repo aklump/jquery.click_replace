@@ -41,6 +41,7 @@ $.fn.clickReplace = function($replaceElement, options) {
 
   //Click handler
   $clickElement
+  .show()
   .hover(function () {
     $(this).addClass('hover');
   }, function () {
