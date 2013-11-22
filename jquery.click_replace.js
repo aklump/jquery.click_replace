@@ -1,11 +1,9 @@
 /**
  * Click on element and it's replaced with another jQuery plugin
- *
- * Allows versions of jQuery without .replaceWith to sort of work
- *
- * @param options
- *
- * @return this
+ * 
+ * @author Aaron Klump, In the Loft Studios, LLC
+ * @see http://www.intheloftstudios.com
+ * @see https://github.com/aklump/jquery.click_replace
  */
 ;(function($, undefined) {
 "use strict";
@@ -69,6 +67,8 @@ $.fn.clickReplace = function($replaceElement, options) {
 
   return response;
 };
+
+$.fn.clickReplace.ver = function() { return '0.0.3'; };
 
 $.fn.clickReplace.defaults = {
   // Apply css cursor to the click element; set to false for no affect
