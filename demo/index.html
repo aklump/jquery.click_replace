@@ -2,6 +2,51 @@
 <html>
 <head>
   <title>Demo of jquery.click_replace.js</title>
+  <style type="text/css" media="all">
+    #div1, #div3 {
+      display: none;
+    }
+    #div1 {
+      background-color: #7c378a;
+      color: #fff;
+    }
+    #div2 {
+      background-color: #F2B701;
+    }
+    #div3 {
+      background-color: #E57D04;
+      color: #fff;
+    }
+    #div4 {
+      background-color: #3465AA;
+    }
+  </style>  
+</head>
+<body>
+  <h1>Demo of jquery.click_replace.js</h1>
+
+  <ul>
+    <li>For no js fallback, set <code>display: none</code> on all click elements in a stylesheet.</li>
+    <li>Notice the size of #div1 and #div3 are taken from their replacement targets.</li>
+    <li>Notice the dynamic classes added to the elements.</li>
+    <li>It is possible to go back in the first example; view source for how to.</li>
+    <li>The second example shows how to pass the replace element as a jquery selector via the data-replace attribute.</li>
+  </ul>
+
+  <p>You can also take a look at the <a href="youtube.html">youtube demo.</a></p>
+
+  <div class="example-1">
+    <div id="div1">#div1: Click me</div>
+    <div id="div2" style="height: 200px; width: 200px;">#div2: I've been replaced and fired a callback. <a href="javascript: revert();">Go back</a></div>
+  </div>
+
+  <div class="example-2">
+    <div id="div3" data-replace=".example-2 .alt">#div3: Click me</div>
+    <div id="div4" class="alt" style="width: 400px; height: 150px; color: white;">#div4: Replaced using #div3's data-replace attribute.</div>
+  </div>
+
+  <p class="text-muted">jquery.click_replace.js is brought to you by <a href="http://www.intheloftstudios.com">In the Loft Studios</a></p>
+
   <script src="externs/jquery-1.4.4.min.js"></script>
   <script src="jquery.click_replace.js"></script>
   <script>
@@ -16,19 +61,12 @@
           alert('Optional callback fired.');
         }
       });
+
+      // Using a data-replace attribute
+      $('#div3').clickReplace();
+
     });
   })(jQuery);
   </script>
-</head>
-<body>
-  <h1>Demo of jquery.click_replace.js</h1>
-
-  <p>This example may seem pointless, but next take a look at the <a href="youtube.html">youtube demo.</a></p>
-
-  <div class="click-replace">
-    <div id="div1" style="background: green; color: white">Click me</div>
-    <div id="div2" style="height: 200px; width: 200px; background: yellow;">I've been replaced! <a href="javascript: revert();">Go back</a></div>
-  </div>
-  <p class="text-muted">jquery.click_replace.js is brought to you by <a href="http://www.intheloftstudios.com">In the Loft Studios</a></p>
 </body>
 </html>

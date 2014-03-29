@@ -1,5 +1,5 @@
-/*!
- * Click Replace jQuery JavaScript Plugin v0.1
+/*
+ * Click Replace jQuery JavaScript Plugin v0.1.1
  * http://www.intheloftstudios.com/packages/jquery/jquery.click_replace
  *
  * Click on element and it's replaced with another.
@@ -7,26 +7,43 @@
  * Copyright 2013, Aaron Klump
  * Dual licensed under the MIT or GPL Version 2 licenses.
  *
- * Date: Sat, 23 Nov 2013 09:23:06 -0800
+ * Date: Sat Mar 29 15:22:44 PDT 2014
  */
 ;(function($, undefined) {
 "use strict";
 
 $.fn.clickReplace = function($replaceElement, options) {
-
   var $clickElement = $(this);
 
+  // Create some defaults, extending them with any options that were provided
+  var settings = $.extend({}, $.fn.clickReplace.defaults, options);  
+
+  if (!$replaceElement) {
+    $replaceElement = $($clickElement.data('replace'));
+  }
+
   // Do nothing when nothing selected
-  if ($clickElement.length === 0) {
+  if ($clickElement.length !== 1) {
+    //console.log('Only one click element may be passed at at time.');
+    return;
+  }
+  else if ($replaceElement.length === 0) {
+    //console.log('Missing replacement element ' + $clickElement.data('replace'));
     return;
   }
 
-  // Create some defaults, extending them with any options that were provided
-  var settings = $.extend({}, $.fn.clickReplace.defaults, options);
+  $clickElement
+  .show()
+  .add($replaceElement).not('.' + settings.cssPrefix + 'processed')
+  .addClass(settings.cssPrefix + 'processed ' + settings.cssPrefix + 'click')
+  .filter($replaceElement)
+  .removeClass(settings.cssPrefix + 'click')
+  .addClass(settings.cssPrefix + 'replace');
+
 
   // Hide the replace element
   $replaceElement
-  .addClass('hidden')
+  .addClass(settings.cssPrefix + 'hidden')
   .hide();
 
   if (settings.cursor) {
@@ -53,7 +70,7 @@ $.fn.clickReplace = function($replaceElement, options) {
     $clickElement
     .hide();
     $replaceElement
-    .removeClass('hidden')
+    .removeClass(settings.cssPrefix + 'hidden')
     .show();
 
     if (settings.replaceCallback) {
@@ -65,8 +82,8 @@ $.fn.clickReplace = function($replaceElement, options) {
   var response = {};
   response.args = [$clickElement, $replaceElement, settings];
   response.revert = function() {
-    $replaceElement.addClass('hidden').hide();
-    $clickElement.removeClass('hidden').show();
+    $replaceElement.addClass(settings.cssPrefix + 'hidden').hide();
+    $clickElement.removeClass(settings.cssPrefix + 'hidden').show();
   };
 
   return response;
@@ -81,7 +98,10 @@ $.fn.clickReplace.defaults = {
   autoResize            : true,
 
   // A function to call when replacing
-  replaceCallback       : null
+  replaceCallback       : null,
+
+  // A prefix for all css classes
+  cssPrefix             : 'cr-'
 };
 
 $.fn.clickReplace.version = function() { return '0.1'; };
