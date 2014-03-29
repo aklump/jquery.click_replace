@@ -1,0 +1,1 @@
+cp -v jquery.click_replace.js demo/
