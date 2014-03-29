@@ -1,5 +1,5 @@
 /*
- * Click Replace jQuery JavaScript Plugin v0.1.1
+ * Click Replace jQuery JavaScript Plugin v0.2
  * http://www.intheloftstudios.com/packages/jquery/jquery.click_replace
  *
  * Click on element and it's replaced with another.
@@ -7,7 +7,7 @@
  * Copyright 2013, Aaron Klump
  * Dual licensed under the MIT or GPL Version 2 licenses.
  *
- * Date: Sat Mar 29 15:22:44 PDT 2014
+ * Date: Sat Mar 29 15:24:28 PDT 2014
  */
 ;(function($, undefined) {
 "use strict";
